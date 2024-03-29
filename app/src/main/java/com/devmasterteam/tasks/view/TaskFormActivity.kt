@@ -26,6 +26,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener {
         binding.buttonSave.setOnClickListener(this)
         binding.buttonDate.setOnClickListener(this)
 
+
         // Layout
         setContentView(binding.root)
     }

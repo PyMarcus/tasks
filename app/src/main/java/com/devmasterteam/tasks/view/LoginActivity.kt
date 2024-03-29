@@ -28,6 +28,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         binding.buttonLogin.setOnClickListener(this)
         binding.textRegister.setOnClickListener(this)
 
+        viewModel.verifyLoggedUser()
+
         // Observadores
         observe()
     }
@@ -45,6 +47,12 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(Intent(applicationContext, MainActivity::class.java))
             }else{
                 Toast.makeText(applicationContext, it.message, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        viewModel.logged.observe(this){
+            if(it){
+                startActivity(Intent(applicationContext, MainActivity::class.java))
             }
         }
     }
