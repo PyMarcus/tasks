@@ -41,11 +41,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun observe() {
         viewModel.login.observe(this) {
-            startActivity(Intent(applicationContext, MainActivity::class.java))
-        }
-
-        viewModel.message.observe(this){
-            Toast.makeText(applicationContext, it, Toast.LENGTH_LONG).show()
+            if(it.status){
+                startActivity(Intent(applicationContext, MainActivity::class.java))
+            }else{
+                Toast.makeText(applicationContext, it.message, Toast.LENGTH_LONG).show()
+            }
         }
     }
 
