@@ -11,7 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TaskRepository {
+class TaskRepository : BaseRepository(){
     private val service = RetrofitClient.getService(TaskService::class.java)
 
     fun list(apiListener: ApiListener<List<TaskModel>>){
@@ -30,4 +30,19 @@ class TaskRepository {
             }
         })
     }
+
+    fun create(task: TaskModel, listener: ApiListener<Boolean>){
+        val call = service.create(task.id, task.description, task.dueDate, task.complete)
+        call.enqueue(object : Callback<Boolean>{
+            override fun onResponse(p0: Call<Boolean>, r: Response<Boolean>) {
+                handleResponse(r.code(), TaskConstants.STATUS.OK, true, r.errorBody()!!.toString(), listener)
+            }
+
+            override fun onFailure(p0: Call<Boolean>, p1: Throwable) {
+                listener.onFail("Erro ao criar a tarefa")
+            }
+
+        })
+    }
+
 }

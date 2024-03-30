@@ -21,6 +21,10 @@ class PriorityRepository(context: Context) {
         database.clear()
         database.save(list)
     }
+
+    fun list(): List<PriorityModel>{
+        return database.list()
+    }
     fun list(apiListener: ApiListener<List<PriorityModel>>){
         val call = service.list()
         call.enqueue(object : Callback<List<PriorityModel>> {

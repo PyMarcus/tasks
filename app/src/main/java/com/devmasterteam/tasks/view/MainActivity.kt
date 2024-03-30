@@ -1,5 +1,6 @@
 package com.devmasterteam.tasks.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         setSupportActionBar(binding.appBarMain.toolbar)
 
         binding.appBarMain.fab.setOnClickListener {
-            TODO()
+            startActivity(Intent(this, TaskFormActivity::class.java))
         }
 
         // Navegação

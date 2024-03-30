@@ -77,6 +77,7 @@
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:gravity="center_vertical"
+        android:textColor="@color/black"
         android:hint="@string/clique_para_selecionar_a_data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
