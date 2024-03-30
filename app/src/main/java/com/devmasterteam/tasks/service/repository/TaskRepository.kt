@@ -44,6 +44,59 @@ class TaskRepository : BaseRepository(){
         })
     }
 
+    fun delete(id: Int, listener: ApiListener<Boolean>){
+        val call = service.delete(id)
+        call.enqueue(object : Callback<Boolean>{
+            override fun onResponse(p0: Call<Boolean>, p1: Response<Boolean>) {
+                if(p1.code() == 200){
+                    listener.onSuccess(true)
+                }else{
+                    listener.onFail("")
+                }
+            }
+
+            override fun onFailure(p0: Call<Boolean>, p1: Throwable) {
+                listener.onFail("Falha")
+            }
+        })
+    }
+
+    fun complete(id: Int, listener: ApiListener<Boolean>){
+        val call = service.updateComplete(id)
+        call.enqueue(object : Callback<Boolean>{
+            override fun onResponse(p0: Call<Boolean>, p1: Response<Boolean>) {
+                if(p1.code() == 200){
+                    listener.onSuccess(true)
+                }else{
+                    listener.onFail("")
+                }
+            }
+
+            override fun onFailure(p0: Call<Boolean>, p1: Throwable) {
+                listener.onFail("")
+            }
+
+        })
+    }
+
+    fun undo(id: Int, listener: ApiListener<Boolean>){
+        val call = service.updateUncomplete(id)
+        call.enqueue(object : Callback<Boolean>{
+            override fun onResponse(p0: Call<Boolean>, p1: Response<Boolean>) {
+                if(p1.code() == 200){
+                    listener.onSuccess(true)
+                }else{
+                    listener.onFail("")
+                }
+            }
+
+            override fun onFailure(p0: Call<Boolean>, p1: Throwable) {
+                listener.onFail("")
+            }
+
+        })
+    }
+
     private fun listData(call: Call<List<TaskModel>>, apiListener: ApiListener<List<TaskModel>>){
         call.enqueue(object : Callback<List<TaskModel>> {
             override fun onResponse(p0: Call<List<TaskModel>>, r: Response<List<TaskModel>>) {

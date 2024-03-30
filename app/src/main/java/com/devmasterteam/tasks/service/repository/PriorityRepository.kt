@@ -37,7 +37,6 @@ class PriorityRepository(context: Context) {
 
 
     // dao
-
     fun save(list: List<PriorityModel>){
         database.clear()
         database.save(list)

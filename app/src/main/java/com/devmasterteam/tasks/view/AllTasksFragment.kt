@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,7 +23,7 @@ class AllTasksFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View {
-        viewModel = ViewModelProvider(this).get(TaskListViewModel::class.java)
+        viewModel = ViewModelProvider(this)[TaskListViewModel::class.java]
         _binding = FragmentAllTasksBinding.inflate(inflater, container, false)
 
 
@@ -35,15 +36,15 @@ class AllTasksFragment : Fragment() {
             }
 
             override fun onDeleteClick(id: Int) {
-                TODO("Not yet implemented")
+                viewModel.delete(id)
             }
 
             override fun onCompleteClick(id: Int) {
-                TODO("Not yet implemented")
+                viewModel.completeTask(id)
             }
 
             override fun onUndoClick(id: Int) {
-                TODO("Not yet implemented")
+                viewModel.undoTask(id)
             }
 
         }
@@ -72,5 +73,14 @@ class AllTasksFragment : Fragment() {
         viewModel.listData.observe(viewLifecycleOwner){
             adapter.updateTasks(it)
         }
+
+        viewModel.removed.observe(viewLifecycleOwner){
+            if(it){
+                Toast.makeText(context, "Tarefa removida!", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context, "Houve uma falha ao tentar remover a tarefa!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 }

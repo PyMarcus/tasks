@@ -17,6 +17,35 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
     private var _listData: MutableLiveData<List<TaskModel>> = MutableLiveData()
     var listData: LiveData<List<TaskModel>> = _listData
 
+    private var _removed: MutableLiveData<Boolean> = MutableLiveData()
+    var removed: LiveData<Boolean> = _removed
+
+    fun completeTask(id: Int){
+        remote.complete(id, object : ApiListener<Boolean>{
+            override fun onSuccess(response: Boolean) {
+                list()
+            }
+
+            override fun onFail(message: String) {
+                println()
+            }
+
+        })
+    }
+
+    fun undoTask(id: Int){
+        remote.undo(id, object : ApiListener<Boolean>{
+            override fun onSuccess(response: Boolean) {
+                list()
+            }
+
+            override fun onFail(message: String) {
+                println()
+            }
+
+        })
+    }
+
     fun list(){
         remote.list(object : ApiListener<List<TaskModel>>{
             override fun onSuccess(response: List<TaskModel>) {
@@ -31,4 +60,17 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
         })
     }
 
+    fun delete(id: Int){
+        remote.delete(id, object : ApiListener<Boolean>{
+            override fun onSuccess(response: Boolean) {
+                list()
+                _removed.value = true
+            }
+
+            override fun onFail(message: String) {
+                _removed.value = false
+            }
+
+        })
+    }
 }

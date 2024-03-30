@@ -6,6 +6,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -43,7 +44,7 @@ interface TaskService {
         @Field("Id") id: Int,
     ): Call<Boolean>
 
-    @DELETE("Task")
+    @HTTP(method ="DELETE", path = "Task", hasBody = true)
     @FormUrlEncoded
     fun delete(
         @Field("Id") id: Int,
@@ -59,5 +60,5 @@ interface TaskService {
     fun listOverdue(): Call<List<TaskModel>>
 
     @GET("Task/{id}")
-    fun getTask(@Path(value="id", encoded = true) id: Int): Call<TaskModel>
+    fun getTask(@Field("id") id: Int): Call<TaskModel>
 }
