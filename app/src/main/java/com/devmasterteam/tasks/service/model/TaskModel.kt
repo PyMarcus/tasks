@@ -17,4 +17,6 @@ class TaskModel {
 
     @SerializedName("Complete")
     var complete: Boolean = false
+
+    var priorityText: String = ""
 }
