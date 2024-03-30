@@ -32,14 +32,14 @@ class TaskRepository : BaseRepository(){
     }
 
     fun create(task: TaskModel, listener: ApiListener<Boolean>){
-        val call = service.create(task.id, task.description, task.dueDate, task.complete)
+        val call = service.create(task.priorityId, task.description, task.dueDate, task.complete)
         call.enqueue(object : Callback<Boolean>{
             override fun onResponse(p0: Call<Boolean>, r: Response<Boolean>) {
-                handleResponse(r.code(), TaskConstants.STATUS.OK, true, r.errorBody()!!.toString(), listener)
+                handleResponse(r.code(), TaskConstants.STATUS.OK, true, listener)
             }
 
             override fun onFailure(p0: Call<Boolean>, p1: Throwable) {
-                listener.onFail("Erro ao criar a tarefa")
+                listener.onFail("Erro ao criar tarefa! Por favor, verifique os campos.")
             }
 
         })

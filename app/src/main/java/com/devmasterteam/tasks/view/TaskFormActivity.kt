@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.devmasterteam.tasks.databinding.ActivityTaskFormBinding
 import com.devmasterteam.tasks.service.model.PriorityModel
@@ -36,6 +37,9 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
         // Layout
         setContentView(binding.root)
         setSpinner()
+
+        // Observe
+        observe()
     }
 
     override fun onClick(v: View) {
@@ -85,11 +89,26 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
             this.id = 0
             this.complete = binding.checkComplete.isChecked
             this.description = binding.editDescription.text.toString()
-            this.priorityId = listPriority.get(binding.spinnerPriority.selectedItemPosition).id
+            this.priorityId = listPriority[binding.spinnerPriority.selectedItemPosition].id
             this.dueDate = binding.buttonDate.text.toString()
         }
         viewModel.save(task)
     }
 
+    private fun observe(){
+        viewModel.save.observe(this){
+            if(it){
+                createToast("Tarefa criada!")
+                finish()
+            }else{
+                createToast("Erro ao criar tarefa! Por favor, verifique os campos.")
+            }
+        }
+    }
+
+    // cria mensagem de aviso e fecha a activity
+    private fun createToast(message: String){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 
 }

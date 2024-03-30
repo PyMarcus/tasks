@@ -23,7 +23,7 @@ class RetrofitClient {
                     val request = chain.request()
                         .newBuilder()
                         .addHeader("token", TOKEN)
-                        .addHeader("personKey", PERSONKEY)
+                        .addHeader("PersonKey", PERSONKEY)
                         .build()
                     return chain.proceed(request)
                 }
