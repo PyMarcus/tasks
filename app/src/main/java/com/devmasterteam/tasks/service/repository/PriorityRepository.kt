@@ -17,9 +17,34 @@ class PriorityRepository(context: Context) {
     private val database: PriorityDAO = TaskDatabase.getDatabase(context).priorityDao()
     private val service = RetrofitClient.getService(PriorityService::class.java)
 
+    /*
+    * CACHE
+    *
+    * Para evitar chamadas desnecessarias ao banco,
+    * o cache servira para elevar a performance do app,
+    * nesse quesito.
+    * */
+    companion object{
+        // para n sair da memoria, deve ser estático.
+        private var cache = mapOf<Int, String>()
+        protected fun getDescriptionFromCache(id: Int): String{
+            return cache[id] ?:""
+        }
+    }
+
+
+    // dao
+
     fun save(list: List<PriorityModel>){
         database.clear()
         database.save(list)
+    }
+
+    fun getDescription(id: Int): String{
+        val data = getDescriptionFromCache(id)
+        if(data == "")
+            return database.getDescription(id)
+        return data
     }
 
     fun list(): List<PriorityModel>{

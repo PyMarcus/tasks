@@ -11,9 +11,10 @@ open class BaseRepository {
 
     open fun <T> handleResponse(r: Int, ok: Int, result: T, listener: ApiListener<T>){
         if(r == ok){
+            println("FALHAJ")
             listener.onSuccess(result)
         }else{
-            listener.onFail(failResponse("Falha ao criar tarefa!"))
+            listener.onFail("Falha ao criar tarefa!")
         }
     }
 }

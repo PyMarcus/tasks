@@ -9,10 +9,13 @@ import com.devmasterteam.tasks.service.model.PriorityModel
 import com.devmasterteam.tasks.service.model.TaskModel
 import com.devmasterteam.tasks.service.model.ValidationModel
 import com.devmasterteam.tasks.service.repository.PriorityRepository
+import com.devmasterteam.tasks.service.repository.SecurityPreferences
 import com.devmasterteam.tasks.service.repository.TaskRepository
 import com.devmasterteam.tasks.service.repository.local.TaskDatabase
+import com.devmasterteam.tasks.service.repository.remote.RetrofitClient
 
 class TaskFormViewModel(application: Application) : AndroidViewModel(application) {
+    //private val securityPreferences: SecurityPreferences = SecurityPreferences(application.applicationContext)
     private val repository = PriorityRepository(application.applicationContext)
     private val remote = TaskRepository()
     private var _list: MutableLiveData<List<PriorityModel>> = MutableLiveData()

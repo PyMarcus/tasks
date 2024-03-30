@@ -16,20 +16,19 @@ class TaskRepository : BaseRepository(){
 
     fun list(apiListener: ApiListener<List<TaskModel>>){
         val call = service.list()
-        call.enqueue(object : Callback<List<TaskModel>> {
-            override fun onResponse(p0: Call<List<TaskModel>>, r: Response<List<TaskModel>>) {
-                if(r.code() == TaskConstants.STATUS.OK){
-                    r.body()?.let { apiListener.onSuccess(it) }
-                }else{
-                    apiListener.onFail(TaskConstants.MESSAGES.BAD_REQUEST)
-                }
-            }
-
-            override fun onFailure(p0: Call<List<TaskModel>>, t: Throwable) {
-                apiListener.onFail(t.toString())
-            }
-        })
+        listData(call, apiListener)
     }
+
+    fun listNext7(apiListener: ApiListener<List<TaskModel>>){
+        val call = service.listNext7()
+        listData(call, apiListener)
+    }
+
+    fun listOverdue(apiListener: ApiListener<List<TaskModel>>){
+        val call = service.listOverdue()
+        listData(call, apiListener)
+    }
+
 
     fun create(task: TaskModel, listener: ApiListener<Boolean>){
         val call = service.create(task.priorityId, task.description, task.dueDate, task.complete)
@@ -45,4 +44,19 @@ class TaskRepository : BaseRepository(){
         })
     }
 
+    private fun listData(call: Call<List<TaskModel>>, apiListener: ApiListener<List<TaskModel>>){
+        call.enqueue(object : Callback<List<TaskModel>> {
+            override fun onResponse(p0: Call<List<TaskModel>>, r: Response<List<TaskModel>>) {
+                if(r.code() == TaskConstants.STATUS.OK){
+                    r.body()?.let { apiListener.onSuccess(it) }
+                }else{
+                    apiListener.onFail(TaskConstants.MESSAGES.BAD_REQUEST)
+                }
+            }
+
+            override fun onFailure(p0: Call<List<TaskModel>>, t: Throwable) {
+                apiListener.onFail(t.toString())
+            }
+        })
+    }
 }

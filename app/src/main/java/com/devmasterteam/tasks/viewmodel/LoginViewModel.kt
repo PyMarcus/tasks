@@ -45,6 +45,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun verifyLoggedUser() {
         val token = securityPreferences.get("token")
         val person = securityPreferences.get("personKey")
+
         RetrofitClient.addHeaders(person, token)
         val l: Boolean = token != "" && person != ""
         isLogged.value = l

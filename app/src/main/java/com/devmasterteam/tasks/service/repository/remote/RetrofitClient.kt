@@ -17,6 +17,7 @@ class RetrofitClient {
 
         private fun getRetrofitInstance(): Retrofit{
             val http = OkHttpClient.Builder()
+            println("FALHATOKEN " + TOKEN + " " + PERSONKEY)
             // add headers a requisicao
             http.addInterceptor(object : Interceptor{
                 override fun intercept(chain: Interceptor.Chain): Response {

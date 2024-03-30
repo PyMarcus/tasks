@@ -93,6 +93,8 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
             this.dueDate = binding.buttonDate.text.toString()
         }
         viewModel.save(task)
+
+
     }
 
     private fun observe(){
