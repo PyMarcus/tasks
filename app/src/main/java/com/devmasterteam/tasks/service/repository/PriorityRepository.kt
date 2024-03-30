@@ -26,9 +26,12 @@ class PriorityRepository(context: Context) {
     * */
     companion object{
         // para n sair da memoria, deve ser estático.
-        private var cache = mapOf<Int, String>()
+        private var cache = mutableMapOf<Int, String>()
         protected fun getDescriptionFromCache(id: Int): String{
             return cache[id] ?:""
+        }
+        protected fun setDescriptionInCache(id: Int, text: String){
+            cache[id] = text
         }
     }
 
@@ -41,10 +44,13 @@ class PriorityRepository(context: Context) {
     }
 
     fun getDescription(id: Int): String{
-        val data = getDescriptionFromCache(id)
-        if(data == "")
-            return database.getDescription(id)
-        return data
+        val cached = getDescriptionFromCache(id)
+        if(cached == "") {
+            val rows = database.getDescription(id)
+            setDescriptionInCache(id, rows)
+            return rows
+        }
+        return cached
     }
 
     fun list(): List<PriorityModel>{
