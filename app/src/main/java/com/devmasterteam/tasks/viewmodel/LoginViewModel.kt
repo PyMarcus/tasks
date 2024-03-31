@@ -8,6 +8,7 @@ import com.devmasterteam.tasks.service.listener.ApiListener
 import com.devmasterteam.tasks.service.model.PriorityModel
 import com.devmasterteam.tasks.service.model.UserModel
 import com.devmasterteam.tasks.service.model.ValidationModel
+import com.devmasterteam.tasks.service.repository.BaseRepository
 import com.devmasterteam.tasks.service.repository.PriorityRepository
 import com.devmasterteam.tasks.service.repository.SecurityPreferences
 import com.devmasterteam.tasks.service.repository.UserRepository
@@ -19,6 +20,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val priorityRepository: PriorityRepository = PriorityRepository(application.applicationContext)
     private var successLogin: MutableLiveData<ValidationModel> = MutableLiveData<ValidationModel>()
     private var isLogged: MutableLiveData<Boolean> = MutableLiveData()
+    private var repo = BaseRepository(application.applicationContext)
     private var _listPriority: MutableLiveData<List<PriorityModel>> = MutableLiveData()
     var login: LiveData<ValidationModel> = successLogin
     var logged: LiveData<Boolean> = isLogged
@@ -35,7 +37,11 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onFail(message: String) {
-                successLogin.value = ValidationModel(message, false)
+                var txt = message
+                if(!repo.isConnectionAvaiable()){
+                    txt = "Verifique as credenciais e a conexao e tente novamente!"
+                }
+                successLogin.value = ValidationModel(txt, false)
             }
 
         })

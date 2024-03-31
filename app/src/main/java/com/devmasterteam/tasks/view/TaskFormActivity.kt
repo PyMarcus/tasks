@@ -67,7 +67,7 @@ class  TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerD
             val taskId = intent.getIntExtra("taskId", 0)
             _taskId = taskId
             if(_taskId != 0)
-            viewModel.load(taskId)
+                viewModel.load(taskId)
     }
 
     private fun handleClicks(){

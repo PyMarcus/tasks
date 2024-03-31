@@ -13,7 +13,7 @@ import com.devmasterteam.tasks.service.repository.TaskRepository
 class TaskFormViewModel(application: Application) : AndroidViewModel(application) {
     //private val securityPreferences: SecurityPreferences = SecurityPreferences(application.applicationContext)
     private val repository = PriorityRepository(application.applicationContext)
-    private val remote = TaskRepository()
+    private val remote = TaskRepository(application)
 
     private var _list: MutableLiveData<List<PriorityModel>> = MutableLiveData()
     var list: LiveData<List<PriorityModel>> = _list

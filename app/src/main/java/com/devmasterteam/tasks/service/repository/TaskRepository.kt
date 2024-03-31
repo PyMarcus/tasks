@@ -1,5 +1,8 @@
 package com.devmasterteam.tasks.service.repository
 
+import android.app.Application
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.devmasterteam.tasks.service.constants.TaskConstants
 import com.devmasterteam.tasks.service.listener.ApiListener
 import com.devmasterteam.tasks.service.model.TaskModel
@@ -9,7 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TaskRepository : BaseRepository(){
+class TaskRepository(application: Application) : BaseRepository(application.applicationContext){
     private val service = RetrofitClient.getService(TaskService::class.java)
 
     fun list(apiListener: ApiListener<List<TaskModel>>){
@@ -110,6 +113,7 @@ class TaskRepository : BaseRepository(){
     }
 
     private fun listData(call: Call<List<TaskModel>>, apiListener: ApiListener<List<TaskModel>>){
+
         call.enqueue(object : Callback<List<TaskModel>> {
             override fun onResponse(p0: Call<List<TaskModel>>, r: Response<List<TaskModel>>) {
                 if(r.code() == TaskConstants.STATUS.OK){
@@ -120,12 +124,20 @@ class TaskRepository : BaseRepository(){
             }
 
             override fun onFailure(p0: Call<List<TaskModel>>, t: Throwable) {
-                apiListener.onFail(t.toString())
+                var txt = t.message.toString()
+                if(!isConnectionAvaiable()){
+                    txt = "Sem conexão!!!"
+                }
+                apiListener.onFail(txt)
             }
         })
     }
 
     fun load(id: Int, listener: ApiListener<TaskModel>){
+     /*   if(!isConnectionAvaiable()){
+            listener.onFail("Sem conexão com a internet!")
+            return
+        }*/
         val call = service.getTask(id)
         call.enqueue(object : Callback<TaskModel>{
             override fun onResponse(p0: Call<TaskModel>, p1: Response<TaskModel>) {

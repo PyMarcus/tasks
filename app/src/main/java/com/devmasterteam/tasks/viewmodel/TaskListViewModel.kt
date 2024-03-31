@@ -1,6 +1,8 @@
 package com.devmasterteam.tasks.viewmodel
 
 import android.app.Application
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,11 +12,14 @@ import com.devmasterteam.tasks.service.repository.PriorityRepository
 import com.devmasterteam.tasks.service.repository.TaskRepository
 
 class TaskListViewModel (application: Application): AndroidViewModel(application) {
-    private val remote = TaskRepository()
+    private val remote = TaskRepository(application)
     private val priorityRepository = PriorityRepository(application.applicationContext)
 
     private var _listData: MutableLiveData<List<TaskModel>> = MutableLiveData()
     var listData: LiveData<List<TaskModel>> = _listData
+
+    private var _msg: MutableLiveData<String> = MutableLiveData()
+    var msg: LiveData<String> = _msg
 
     private var _removed: MutableLiveData<Boolean> = MutableLiveData()
     var removed: LiveData<Boolean> = _removed
@@ -26,7 +31,8 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
             }
 
             override fun onFail(message: String) {
-                println()
+                _msg.value = message
+                _listData.value = listOf()
             }
 
         })
@@ -35,12 +41,12 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
     fun undoTask(id: Int){
         remote.undo(id, object : ApiListener<Boolean>{
             override fun onSuccess(response: Boolean) {
-                println("OK, nao deu zebra ")
                 list()
             }
 
             override fun onFail(message: String) {
-                println("OK, deu zebra $message")
+                _msg.value = message
+                _listData.value = listOf()
             }
 
         })
@@ -55,7 +61,8 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
                 _listData.value = response
             }
             override fun onFail(message: String) {
-                println("Fail")
+                _msg.value = message
+                _listData.value = listOf()
             }
         })
     }
@@ -69,6 +76,8 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
 
             override fun onFail(message: String) {
                 _removed.value = false
+                _msg.value = message
+                _listData.value = listOf()
             }
 
         })
