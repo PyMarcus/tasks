@@ -32,4 +32,20 @@ class UserRepository {
         })
     }
 
+    fun create(name: String, email: String, password: String, apiListener: ApiListener<Boolean>){
+        val call = service.create(name, email, password)
+        call.enqueue(object : Callback<UserModel> {
+            override fun onResponse(p0: Call<UserModel>, r: Response<UserModel>) {
+                if(r.code() == OK){
+                    r.body()?.let { apiListener.onSuccess(true) }
+                }else{
+                    apiListener.onFail(BAD_REQUEST)
+                }
+            }
+
+            override fun onFailure(p0: Call<UserModel>, t: Throwable) {
+                apiListener.onFail(t.toString())
+            }
+        })
+    }
 }
