@@ -32,6 +32,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/prioridade"
         android:textStyle="bold"
+        android:textColor="@color/purple_500"
         app:layout_constraintStart_toEndOf="@id/image_task"
         app:layout_constraintTop_toBottomOf="@id/text_description" />
 
@@ -41,6 +42,7 @@
         android:layout_height="wrap_content"
         android:text="@string/data_limite"
         android:textStyle="bold"
+        android:textColor="@color/pink"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

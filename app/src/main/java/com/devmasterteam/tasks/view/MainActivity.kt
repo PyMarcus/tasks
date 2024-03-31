@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         binding.appBarMain.fab.setOnClickListener {
             startActivity(Intent(this, TaskFormActivity::class.java))
         }
-
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.loadUserName()
         // Navegação

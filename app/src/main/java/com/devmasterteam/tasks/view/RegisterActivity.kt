@@ -25,6 +25,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         binding.buttonSave.setOnClickListener(this)
 
         // Layout
+        supportActionBar!!.hide()
         setContentView(binding.root)
 
         // observers

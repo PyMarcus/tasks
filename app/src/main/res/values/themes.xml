@@ -22,4 +22,13 @@
     <style name="Theme.Tasks.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Tasks.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    
+    
+    <style name="DefaultBtn">
+        <item name="android:paddingHorizontal">64dp</item>
+        <item name="android:paddingVertical">8dp</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:backgroundTint">@color/pink</item>
+    </style>
+    
 </resources>

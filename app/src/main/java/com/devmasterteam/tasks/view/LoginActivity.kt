@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         // Eventos
         binding.buttonLogin.setOnClickListener(this)
         binding.textRegister.setOnClickListener(this)
-
+        supportActionBar!!.hide()
         viewModel.verifyLoggedUser()
 
         // Observadores
