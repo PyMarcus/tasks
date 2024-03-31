@@ -22,6 +22,7 @@ class AllTasksFragment : Fragment() {
     private var _binding: FragmentAllTasksBinding? = null
     private var adapter: TaskAdapter = TaskAdapter()
     private val binding get() = _binding!!
+    private var taskFilter = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View {
         viewModel = ViewModelProvider(this)[TaskListViewModel::class.java]
@@ -30,6 +31,18 @@ class AllTasksFragment : Fragment() {
 
         binding.recyclerAllTasks.layoutManager = LinearLayoutManager(context)
         binding.recyclerAllTasks.adapter = adapter
+
+        // checa qual fragment foi clicada
+        taskFilter = requireArguments().getInt("taskF", -1)
+        if(taskFilter == -1){
+            taskFilter = requireArguments().getInt("taskN", -1)
+            if(taskFilter == -1){
+                taskFilter = requireArguments().getInt("taskE", -1)
+                if(taskFilter == -1){
+                    taskFilter = 0
+                }
+            }
+        }
 
         val listener = object : TaskListener{
             override fun onListClick(id: Int) {
@@ -54,7 +67,7 @@ class AllTasksFragment : Fragment() {
 
         adapter.attachListener(listener)
 
-        viewModel.list()
+        viewModel.list(taskFilter)
 
         // Cria os observadores
         observe()
@@ -64,7 +77,7 @@ class AllTasksFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.list()
+        viewModel.list(taskFilter)
     }
 
     override fun onDestroyView() {

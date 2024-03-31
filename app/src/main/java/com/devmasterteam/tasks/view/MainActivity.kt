@@ -12,14 +12,19 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.get
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.ui.NavigationUI
 import com.devmasterteam.tasks.R
 import com.devmasterteam.tasks.databinding.ActivityMainBinding
+import com.devmasterteam.tasks.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +37,8 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         binding.appBarMain.fab.setOnClickListener {
             startActivity(Intent(this, TaskFormActivity::class.java))
         }
+
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         // Navegação
         setupNavigation()
@@ -59,6 +66,17 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navView.setNavigationItemSelectedListener {
+            if(it.itemId == R.id.nav_logout){
+                viewModel.logout()
+                startActivity(Intent(applicationContext, LoginActivity::class.java))
+            }else{
+                NavigationUI.onNavDestinationSelected(it, navController)
+                drawerLayout.closeDrawer(GravityCompat.START)
+            }
+            true
+        }
 
     }
 

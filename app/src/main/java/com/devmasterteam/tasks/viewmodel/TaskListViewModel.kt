@@ -24,10 +24,12 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
     private var _removed: MutableLiveData<Boolean> = MutableLiveData()
     var removed: LiveData<Boolean> = _removed
 
+    private var taskF = 0
+
     fun completeTask(id: Int){
         remote.complete(id, object : ApiListener<Boolean>{
             override fun onSuccess(response: Boolean) {
-                list()
+                list(taskF)
             }
 
             override fun onFail(message: String) {
@@ -41,7 +43,7 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
     fun undoTask(id: Int){
         remote.undo(id, object : ApiListener<Boolean>{
             override fun onSuccess(response: Boolean) {
-                list()
+                list(taskF)
             }
 
             override fun onFail(message: String) {
@@ -52,11 +54,12 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
         })
     }
 
-    fun list(){
-        remote.list(object : ApiListener<List<TaskModel>>{
+    fun list(taskFilter: Int){
+        taskF = taskFilter
+        val listener = object : ApiListener<List<TaskModel>>{
             override fun onSuccess(response: List<TaskModel>) {
                 response.forEach{
-                    taskModel -> taskModel.priorityText = priorityRepository.getDescription(taskModel.priorityId)
+                        taskModel -> taskModel.priorityText = priorityRepository.getDescription(taskModel.priorityId)
                 }
                 _listData.value = response
             }
@@ -64,13 +67,29 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
                 _msg.value = message
                 _listData.value = listOf()
             }
-        })
+        }
+
+        // all
+        when (taskFilter) {
+            0 -> {
+                remote.list(listener)
+            }
+            // next
+            1 -> {
+                remote.listNext7(listener)
+            }
+            // overdue
+            2 -> {
+                remote.listOverdue(listener)
+            }
+        }
+
     }
 
     fun delete(id: Int){
         remote.delete(id, object : ApiListener<Boolean>{
             override fun onSuccess(response: Boolean) {
-                list()
+                list(0)
                 _removed.value = true
             }
 
