@@ -15,12 +15,13 @@ import com.devmasterteam.tasks.viewmodel.TaskFormViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
-class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDialog.OnDateSetListener{
+class  TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDialog.OnDateSetListener{
 
     private lateinit var viewModel: TaskFormViewModel
     private lateinit var binding: ActivityTaskFormBinding
     private var dateFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
     private var listPriority: List<PriorityModel> = listOf()
+    private var _taskId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +31,13 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
         viewModel = ViewModelProvider(this)[TaskFormViewModel::class.java]
         binding = ActivityTaskFormBinding.inflate(layoutInflater)
 
+
         // Eventos
         handleClicks()
         viewModel.listPriority()
+
+        loadDataFromActivity()
+
 
         // Layout
         setContentView(binding.root)
@@ -56,6 +61,13 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
 
         val dueDate = dateFormat.format(calendar.time)
         binding.buttonDate.text = dueDate
+    }
+
+    private fun loadDataFromActivity(){
+            val taskId = intent.getIntExtra("taskId", 0)
+            _taskId = taskId
+            if(_taskId != 0)
+            viewModel.load(taskId)
     }
 
     private fun handleClicks(){
@@ -86,15 +98,13 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
 
     private fun save(){
         val task = TaskModel().apply {
-            this.id = 0
+            this.id = _taskId
             this.complete = binding.checkComplete.isChecked
             this.description = binding.editDescription.text.toString()
             this.priorityId = listPriority[binding.spinnerPriority.selectedItemPosition].id
             this.dueDate = binding.buttonDate.text.toString()
         }
         viewModel.save(task)
-
-
     }
 
     private fun observe(){
@@ -106,6 +116,44 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
                 createToast("Erro ao criar tarefa! Por favor, verifique os campos.")
             }
         }
+
+        viewModel.task.observe(this){
+            binding.editDescription.setText(it.description)
+            val date = SimpleDateFormat("yyyy-MM-dd").parse(it.dueDate)
+            binding.buttonDate.text = SimpleDateFormat("dd/MM/yyyy").format(date)
+            binding.spinnerPriority.setSelection(getIndex(it.priorityId))
+            binding.checkComplete.isChecked = it.complete
+        }
+
+        viewModel.failTask.observe(this){
+            if(it != null){
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+
+        viewModel.update.observe(this){
+            if(it){
+                Toast.makeText(this, "Atualizado!", Toast.LENGTH_SHORT).show()
+                finish()
+            }else{
+                Toast.makeText(this, "Falha ao atualizar", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+    }
+
+    private fun getIndex(id: Int) : Int{
+        var index = 0
+        for(l in listPriority){
+            if(l.id == id){
+                break
+            }
+            println("ITEM ${l.id} ${l.description} ${id}")
+            index++
+        }
+        if(index == listPriority.size) index --
+        return index
     }
 
     // cria mensagem de aviso e fecha a activity

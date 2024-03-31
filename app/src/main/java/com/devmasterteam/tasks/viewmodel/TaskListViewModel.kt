@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.devmasterteam.tasks.service.listener.ApiListener
 import com.devmasterteam.tasks.service.model.TaskModel
 import com.devmasterteam.tasks.service.repository.PriorityRepository
@@ -36,11 +35,12 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
     fun undoTask(id: Int){
         remote.undo(id, object : ApiListener<Boolean>{
             override fun onSuccess(response: Boolean) {
+                println("OK, nao deu zebra ")
                 list()
             }
 
             override fun onFail(message: String) {
-                println()
+                println("OK, deu zebra $message")
             }
 
         })
@@ -52,7 +52,7 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
                 response.forEach{
                     taskModel -> taskModel.priorityText = priorityRepository.getDescription(taskModel.priorityId)
                 }
-                _listData.value = response.sortedBy { it.dueDate }
+                _listData.value = response
             }
             override fun onFail(message: String) {
                 println("Fail")
@@ -73,4 +73,5 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
 
         })
     }
+
 }
