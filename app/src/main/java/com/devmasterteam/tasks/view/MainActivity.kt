@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
+import android.widget.TextView
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         }
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
+        viewModel.loadUserName()
         // Navegação
         setupNavigation()
 
@@ -81,7 +82,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     private fun observe() {
-
+        viewModel.name.observe(this){
+            val header = binding.navView.getHeaderView(0)
+            header.findViewById<TextView>(R.id.text_name).text = it
+        }
     }
 
     override fun onClick(click: View) {
