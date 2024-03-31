@@ -90,13 +90,10 @@ class TaskListViewModel (application: Application): AndroidViewModel(application
         remote.delete(id, object : ApiListener<Boolean>{
             override fun onSuccess(response: Boolean) {
                 list(0)
-                _removed.value = true
             }
 
             override fun onFail(message: String) {
-                _removed.value = false
                 _msg.value = message
-                _listData.value = listOf()
             }
 
         })
