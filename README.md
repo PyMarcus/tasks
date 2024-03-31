@@ -15,3 +15,11 @@ tasks is an application that makes massive use of retrofit, in addition, it has 
 
 ![image](https://github.com/PyMarcus/tasks/assets/88283829/14981388-ca3c-42be-8490-e98d8b271faa)
 
+<hr>
+
+![image](https://github.com/PyMarcus/tasks/assets/88283829/1fd1c0b2-5876-4aae-8a31-650692e28c18)
+
+<hr>
+
+![image](https://github.com/PyMarcus/tasks/assets/88283829/2b4b0a71-36d6-499c-b3e3-59e5538fbf7f)
+
